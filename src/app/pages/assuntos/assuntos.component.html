@@ -1,1 +1,34 @@
-<p>assuntos works!</p>
+<div class="container mt-4">
+    <h2 class="mb-3">Assuntos</h2>
+  
+    <button class="btn btn-primary mb-3" (click)="abrirModalAdd()">+ Adicionar assunto</button>
+  
+    <app-table
+      [headers]="['ID', 'Descrição']"
+      [keys]="['codAs', 'descricao']"
+      [data]="assuntos"
+      (edit)="abrirModalEdit($event)"
+      (delete)="excluirAssunto($event)">
+    </app-table>
+  
+    <!-- Modal Add -->
+    <app-modal-add
+      [label]="'assunto'"
+      [placeholder]="'Descrição do assunto'"
+      [modelValue]="descricao"
+      [show]="showAddModal"
+      (save)="salvarAssunto($event)"
+      (close)="fecharModal()">
+    </app-modal-add>
+  
+    <!-- Modal Edit -->
+    <app-modal-edit
+      [label]="'assunto'"
+      [placeholder]="'Descrição do assunto'"
+      [modelValue]="descricao"
+      [show]="showEditModal"
+      (save)="salvarAssunto($event)"
+      (close)="fecharModal()">
+    </app-modal-edit>
+  </div>
+  

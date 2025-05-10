@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Autor } from 'src/app/shared/models/autor.model';
 import { ApiService } from 'src/app/shared/api.service';
+import { ToastService } from 'src/app/shared/services/toast.service'; // Importar o ToastService
 
 @Component({
   selector: 'app-autores',
@@ -15,7 +16,7 @@ export class AutoresComponent implements OnInit {
   autorNome = '';
   autorEditando: Autor | null = null;
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private toast: ToastService) {} // Injeção do ToastService
 
   ngOnInit(): void {
     this.carregarAutores();
@@ -50,19 +51,33 @@ export class AutoresComponent implements OnInit {
 
     if (this.autorEditando) {
       this.api.put('autor', this.autorEditando.codAu, { codAu: this.autorEditando.codAu, nome })
-        .subscribe(() => {
-          this.fecharModal();
-          this.carregarAutores();
+        .subscribe({
+          next: () => {
+            this.toast.showSuccess('Autor atualizado com sucesso!');  // Exibe sucesso
+            this.fecharModal();
+            this.carregarAutores();
+          },
+          error: () => this.toast.showError('Erro ao atualizar autor.')  // Exibe erro
         });
     } else {
-      this.api.post('autor', payload).subscribe(() => {
-        this.fecharModal();
-        this.carregarAutores();
+      this.api.post('autor', payload).subscribe({
+        next: () => {
+          this.toast.showSuccess('Autor adicionado com sucesso!');  // Exibe sucesso
+          this.fecharModal();
+          this.carregarAutores();
+        },
+        error: () => this.toast.showError('Erro ao adicionar autor.')  // Exibe erro
       });
     }
   }
 
   excluirAutor(id: number) {
-    this.api.delete('autor', id).subscribe(() => this.carregarAutores());
+    this.api.delete('autor', id).subscribe({
+      next: () => {
+        this.toast.showSuccess('Autor excluído!');  // Exibe sucesso
+        this.carregarAutores();
+      },
+      error: () => this.toast.showError('Erro ao excluir autor.')  // Exibe erro
+    });
   }
 }

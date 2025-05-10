@@ -5,12 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { TableComponent } from './components/table/table.component';
 import { ModalAddComponent } from './components/modal-add/modal-add.component';
 import { ModalEditComponent } from './components/modal-edit/modal-edit.component';
+import { ToastComponent } from './components/toast/toast.component';
 
 @NgModule({
   declarations: [
     TableComponent,
     ModalAddComponent,
-    ModalEditComponent
+    ModalEditComponent,
+    ToastComponent
   ],
   imports: [
     CommonModule,
@@ -19,7 +21,8 @@ import { ModalEditComponent } from './components/modal-edit/modal-edit.component
   exports: [
     TableComponent,
     ModalAddComponent,
-    ModalEditComponent
+    ModalEditComponent,
+    ToastComponent
   ]
 })
 export class SharedModule { }
