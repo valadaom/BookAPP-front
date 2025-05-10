@@ -1,1 +1,24 @@
-<p>autores works!</p>
+<div class="container mt-4">
+    <h2 class="mb-3">Autores</h2>
+  
+    <button class="btn btn-primary mb-3" (click)="abrirModalAdd()">+ Adicionar autor</button>
+  
+    <app-table
+      [headers]="['ID', 'Nome']"
+      [keys]="['codAu', 'nome']"
+      [data]="autores"
+      (edit)="abrirModalEdit($event)"
+      (delete)="excluirAutor($event)">
+    </app-table>
+  
+    <!-- Modal para Adicionar -->
+    <app-modal-add
+      [label]="'autor'"
+      [placeholder]="'Nome do autor'"
+      [modelValue]="autorNome"
+      [show]="showAddModal"
+      (save)="salvarAutor($event)"
+      (close)="fecharModal()">
+    </app-modal-add>
+  </div>
+  

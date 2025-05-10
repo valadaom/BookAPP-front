@@ -1,0 +1,18 @@
+<div class="modal" tabindex="-1" style="display:block;" *ngIf="show">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Adicionar {{ label }}</h5>
+          <button type="button" class="btn-close" (click)="close.emit()"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" [(ngModel)]="modelValue" [placeholder]="placeholder" class="form-control" />
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="close.emit()">Cancelar</button>
+          <button class="btn btn-primary" (click)="save.emit(modelValue)">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
