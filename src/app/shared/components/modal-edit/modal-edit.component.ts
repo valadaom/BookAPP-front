@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-modal-edit',
   templateUrl: './modal-edit.component.html',
   styleUrls: ['./modal-edit.component.scss']
 })
-export class ModalEditComponent implements OnInit {
+export class ModalEditComponent {
+  @Input() label: string = '';
+  @Input() placeholder: string = '';
+  @Input() modelValue: string = '';
+  @Input() show: boolean = false;
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  @Output() close = new EventEmitter<void>();
+  @Output() save = new EventEmitter<string>();
 }
