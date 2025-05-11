@@ -7,10 +7,12 @@
     </thead>
     <tbody>
       <tr *ngFor="let item of data">
-        <td *ngFor="let key of keys">{{ item[key] }}</td>
+        <td *ngFor="let key of keys">
+          {{ getCellValue(item, key) }}
+        </td>
         <td>
           <button class="btn btn-sm btn-warning me-2" (click)="edit.emit(item)">Editar</button>
-          <button class="btn btn-sm btn-danger" (click)="delete.emit(item.id || item.codAu || item.codAs)">Excluir</button>
+          <button class="btn btn-sm btn-danger" (click)="delete.emit(item)">Excluir</button>
         </td>
       </tr>
     </tbody>

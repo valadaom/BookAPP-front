@@ -1,68 +1,118 @@
 <div class="container mt-4">
-    <h2 class="mb-3">Livros</h2>
-  
-    <button class="btn btn-primary mb-3" (click)="abrirModalAdd()">+ Adicionar livro</button>
-  
-    <app-table
-      [headers]="['ID', 'Título', 'Editora', 'Ano']"
-      [keys]="['codL', 'titulo', 'editora', 'anoPublicacao']"
-      [data]="livros"
-      (edit)="abrirModalEdit($event)"
-      (delete)="excluirLivro($event)">
-    </app-table>
-  
-    <!-- Modal Add -->
-    <div *ngIf="showAddModal || showEditModal" class="modal fade show d-block" style="background-color: rgba(0,0,0,0.5);">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title">{{ editandoLivro ? 'Editar' : 'Adicionar' }} Livro</h5>
-            <button class="btn-close" (click)="fecharModal()"></button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="mb-3">
-                <label>Título</label>
-                <input class="form-control" [(ngModel)]="livro.titulo" name="titulo">
+  <h2 class="mb-3">Livros</h2>
+
+  <button class="btn btn-primary mb-3" (click)="abrirModalAdd()">
+    + Adicionar livro
+  </button>
+
+  <app-table
+    [headers]="['ID', 'Título', 'Editora', 'Ano', 'Autor(es)', 'Assunto(s)']"
+    [keys]="['codL', 'titulo', 'editora', 'anoPublicacao', 'autores.nome', 'assuntos.descricao']"
+    [data]="livrosList"
+    (edit)="abrirModalEdit($event)"
+    (delete)="excluirLivro($event)"
+  >
+  </app-table>
+
+  <!-- Modal Add -->
+  <div
+    *ngIf="showAddModal || showEditModal"
+    class="modal fade show d-block"
+    style="background-color: rgba(0, 0, 0, 0.5)"
+  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">
+            {{ editandoLivroId ? "Editar" : "Adicionar" }} Livro
+          </h5>
+          <button class="btn-close" (click)="fecharModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label>Título</label>
+              <input
+                class="form-control"
+                [(ngModel)]="livro.titulo"
+                name="titulo"
+              />
+            </div>
+            <div class="mb-3">
+              <label>Editora</label>
+              <input
+                class="form-control"
+                [(ngModel)]="livro.editora"
+                name="editora"
+              />
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label>Edição</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  [(ngModel)]="livro.edicao"
+                  name="edicao"
+                />
               </div>
-              <div class="mb-3">
-                <label>Editora</label>
-                <input class="form-control" [(ngModel)]="livro.editora" name="editora">
+              <div class="col-md-6 mb-3">
+                <label>Ano</label>
+                <input
+                  class="form-control"
+                  [(ngModel)]="livro.anoPublicacao"
+                  name="ano"
+                />
               </div>
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label>Edição</label>
-                  <input type="number" class="form-control" [(ngModel)]="livro.edicao" name="edicao">
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label>Ano</label>
-                  <input class="form-control" [(ngModel)]="livro.anoPublicacao" name="ano">
-                </div>
+            </div>
+
+            <div class="mb-3">
+              <label>Autores</label>
+              <div class="form-check" *ngFor="let autor of autores">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  [value]="autor.codAu"
+                  [checked]="livro.autoresIds.includes(autor.codAu)"
+                  (change)="onToggleAutor(autor.codAu)"
+                  id="autor{{ autor.codAu }}"
+                />
+                <label class="form-check-label" [for]="'autor' + autor.codAu">
+                  {{ autor.nome }}
+                </label>
               </div>
-  
-              <div class="mb-3">
-                <label>Autores</label>
-                <select multiple class="form-control" [(ngModel)]="livro.autoresIds" name="autores">
-                  <option *ngFor="let a of autores" [value]="a.codAu">{{ a.nome }}</option>
-                </select>
+            </div>
+
+            <div class="mb-3">
+              <label>Assuntos</label>
+              <div class="form-check" *ngFor="let assunto of assuntos">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  [value]="assunto.codAs"
+                  [checked]="livro.assuntosIds.includes(assunto.codAs)"
+                  (change)="onToggleAssunto(assunto.codAs)"
+                  id="assunto{{ assunto.codAs }}"
+                />
+                <label
+                  class="form-check-label"
+                  [for]="'assunto' + assunto.codAs"
+                >
+                  {{ assunto.descricao }}
+                </label>
               </div>
-  
-              <div class="mb-3">
-                <label>Assuntos</label>
-                <select multiple class="form-control" [(ngModel)]="livro.assuntosIds" name="assuntos">
-                  <option *ngFor="let a of assuntos" [value]="a.codAs">{{ a.descricao }}</option>
-                </select>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-secondary" (click)="fecharModal()">Cancelar</button>
-            <button class="btn btn-success" (click)="salvarLivro()">
-              {{ editandoLivro ? 'Atualizar' : 'Salvar' }}
-            </button>
-          </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="fecharModal()">
+            Cancelar
+          </button>
+          <button class="btn btn-success" (click)="salvarLivro()">
+            {{ editandoLivroId ? "Atualizar" : "Salvar" }}
+          </button>
         </div>
       </div>
     </div>
   </div>
-  
+</div>

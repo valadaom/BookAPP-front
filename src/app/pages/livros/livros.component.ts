@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Livro } from 'src/app/shared/models/livro.model';
+import { LivroCreate, LivroRead, mapLivroReadToCreate } from 'src/app/shared/models/livro.model';
 import { Autor } from 'src/app/shared/models/autor.model';
 import { Assunto } from 'src/app/shared/models/assunto.model';
 import { ApiService } from 'src/app/shared/api.service';
@@ -10,25 +10,23 @@ import { ToastService } from 'src/app/shared/services/toast.service';
   templateUrl: './livros.component.html'
 })
 export class LivrosComponent implements OnInit {
-  livros: Livro[] = [];
+  livrosList: LivroRead[] = [];
   autores: Autor[] = [];
   assuntos: Assunto[] = [];
 
   showAddModal = false;
   showEditModal = false;
 
-  livro: Livro = this.novoLivro();
-  editandoLivro: Livro | null = null;
+  livro: LivroCreate = this.novoLivro();
+  editandoLivroId: number | null = null;
 
   constructor(private api: ApiService, private toast: ToastService) {}
 
   ngOnInit(): void {
     this.carregarLivros();
-    this.carregarAutores();
-    this.carregarAssuntos();
   }
 
-  novoLivro(): Livro {
+  novoLivro(): LivroCreate {
     return {
       codL: 0,
       titulo: '',
@@ -41,7 +39,7 @@ export class LivrosComponent implements OnInit {
   }
 
   carregarLivros() {
-    this.api.get<Livro[]>('livro').subscribe(res => this.livros = res);
+    this.api.get<LivroRead[]>('livro').subscribe(res => this.livrosList = res);
   }
 
   carregarAutores() {
@@ -53,21 +51,26 @@ export class LivrosComponent implements OnInit {
   }
 
   abrirModalAdd() {
+    this.carregarAutores();
+    this.carregarAssuntos();
     this.livro = this.novoLivro();
     this.showAddModal = true;
   }
 
-  abrirModalEdit(l: Livro) {
-    this.editandoLivro = { ...l };
-    this.livro = { ...l };
-    this.showEditModal = true;
-  }
+  abrirModalEdit(livro: LivroRead) {
+  this.carregarAutores();
+  this.carregarAssuntos();
+  this.editandoLivroId = livro.codL;
+  const dto = mapLivroReadToCreate(livro);
+  this.livro = { ...dto };
+  this.showEditModal = true;
+}
 
   fecharModal() {
     this.showAddModal = false;
     this.showEditModal = false;
     this.livro = this.novoLivro();
-    this.editandoLivro = null;
+    this.editandoLivroId = null;
   }
 
   salvarLivro() {
@@ -75,8 +78,8 @@ export class LivrosComponent implements OnInit {
       ...this.livro
     };
 
-    if (this.editandoLivro) {
-      this.api.put('livro', this.editandoLivro.codL, body).subscribe({
+    if (this.editandoLivroId) {
+      this.api.put('livro', this.editandoLivroId, body).subscribe({
         next: () => {
           this.toast.showSuccess('Livro atualizado com sucesso!');
           this.carregarLivros();
@@ -96,8 +99,8 @@ export class LivrosComponent implements OnInit {
     }
   }
 
-  excluirLivro(id: number) {
-    this.api.delete('livro', id).subscribe({
+  excluirLivro(l: LivroRead) {
+    this.api.delete('livro', l.codL).subscribe({
       next: () => {
         this.toast.showSuccess('Livro excluído!');
         this.carregarLivros();
@@ -105,4 +108,20 @@ export class LivrosComponent implements OnInit {
       error: () => this.toast.showError('Erro ao excluir livro.')
     });
   }
+
+  onToggleAutor(codAu: number) {
+  if (this.livro.autoresIds.includes(codAu)) {
+    this.livro.autoresIds = this.livro.autoresIds.filter(id => id !== codAu);
+  } else {
+    this.livro.autoresIds.push(codAu);
+  }
+}
+
+onToggleAssunto(codAs: number) {
+  if (this.livro.assuntosIds.includes(codAs)) {
+    this.livro.assuntosIds = this.livro.assuntosIds.filter(id => id !== codAs);
+  } else {
+    this.livro.assuntosIds.push(codAs);
+  }
+}
 }
