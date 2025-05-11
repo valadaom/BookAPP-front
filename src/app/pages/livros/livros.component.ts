@@ -20,6 +20,8 @@ export class LivrosComponent implements OnInit {
   livro: LivroCreate = this.novoLivro();
   editandoLivroId: number | null = null;
 
+  selectedLivro: any = null;
+  showPrecoModal = false;
   constructor(private api: ApiService, private toast: ToastService) {}
 
   ngOnInit(): void {
@@ -79,7 +81,7 @@ export class LivrosComponent implements OnInit {
     };
 
     if (this.editandoLivroId) {
-      this.api.put('livro', this.editandoLivroId, body).subscribe({
+      this.api.put('livro', body, this.editandoLivroId).subscribe({
         next: () => {
           this.toast.showSuccess('Livro atualizado com sucesso!');
           this.carregarLivros();
@@ -123,5 +125,10 @@ onToggleAssunto(codAs: number) {
   } else {
     this.livro.assuntosIds.push(codAs);
   }
+}
+
+abrirModalPreco(livro: any) {
+  this.selectedLivro = livro;
+  this.showPrecoModal = true;
 }
 }

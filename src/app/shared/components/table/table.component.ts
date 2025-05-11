@@ -9,9 +9,11 @@ export class TableComponent {
   @Input() headers: string[] = [];
   @Input() keys: string[] = [];
   @Input() data: any[] = [];
+  @Input() isLivro = false;
 
   @Output() edit = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
+  @Output() editPreco = new EventEmitter<any>();
 
 
   getCellValue(row: any, key: string): string {

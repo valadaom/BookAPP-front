@@ -11,8 +11,18 @@
     [data]="livrosList"
     (edit)="abrirModalEdit($event)"
     (delete)="excluirLivro($event)"
+    (editPreco)="abrirModalPreco($event)"
+    [isLivro]="true"
   >
   </app-table>
+
+  <app-modal-preco
+  *ngIf="showPrecoModal"
+  [show]="showPrecoModal"
+  [livro]="selectedLivro"
+  (close)="showPrecoModal = false"
+  (save)="carregarLivros()"
+></app-modal-preco>
 
   <!-- Modal Add -->
   <div
@@ -62,6 +72,7 @@
                   class="form-control"
                   [(ngModel)]="livro.anoPublicacao"
                   name="ano"
+                  maxlength="4"
                 />
               </div>
             </div>

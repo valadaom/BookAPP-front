@@ -1,0 +1,28 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog" *ngIf="show">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Definir Preços - {{ livro?.titulo }}</h5>
+        <button type="button" class="btn-close" (click)="close.emit()"></button>
+      </div>
+
+      <div class="modal-body">
+        <div *ngFor="let forma of formasCompra" class="mb-3">
+          <label class="form-label">{{ forma.nome }}</label>
+          <input
+            type="number"
+            class="form-control"
+            [(ngModel)]="precos[forma.codFC]"
+            min="0"
+            step="0.01"
+          />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="close.emit()">Cancelar</button>
+        <button class="btn btn-primary" (click)="onSave()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>

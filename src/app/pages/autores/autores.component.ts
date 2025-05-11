@@ -50,7 +50,7 @@ export class AutoresComponent implements OnInit {
     const payload = { nome };
 
     if (this.autorEditando) {
-      this.api.put('autor', this.autorEditando.codAu, { codAu: this.autorEditando.codAu, nome })
+      this.api.put('autor', { codAu: this.autorEditando.codAu, nome }, this.autorEditando.codAu)
         .subscribe({
           next: () => {
             this.toast.showSuccess('Autor atualizado com sucesso!');  // Exibe sucesso

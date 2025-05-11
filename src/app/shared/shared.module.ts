@@ -6,13 +6,15 @@ import { TableComponent } from './components/table/table.component';
 import { ModalAddComponent } from './components/modal-add/modal-add.component';
 import { ModalEditComponent } from './components/modal-edit/modal-edit.component';
 import { ToastComponent } from './components/toast/toast.component';
+import { ModalPrecoComponent } from './components/modal-preco/modal-preco.component';
 
 @NgModule({
   declarations: [
     TableComponent,
     ModalAddComponent,
     ModalEditComponent,
-    ToastComponent
+    ToastComponent,
+    ModalPrecoComponent
   ],
   imports: [
     CommonModule,
@@ -22,7 +24,8 @@ import { ToastComponent } from './components/toast/toast.component';
     TableComponent,
     ModalAddComponent,
     ModalEditComponent,
-    ToastComponent
+    ToastComponent,
+    ModalPrecoComponent
   ]
 })
 export class SharedModule { }

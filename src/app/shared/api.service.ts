@@ -22,8 +22,11 @@ export class ApiService {
     return this.http.post<T>(`${this.api}/${endpoint}`, body);
   }
 
-  put<T>(endpoint: string, id: number, body: any) {
-    return this.http.put<T>(`${this.api}/${endpoint}/${id}`, body);
+  put<T>(endpoint: string, body: any, id: number | undefined) {
+    if (id !== undefined){
+      return this.http.put<T>(`${this.api}/${endpoint}/${id}`, body);
+    }
+    return this.http.put<T>(`${this.api}/${endpoint}`, body);
   }
 
   delete<T>(endpoint: string, id: number) {

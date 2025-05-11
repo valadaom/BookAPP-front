@@ -50,10 +50,11 @@ export class AssuntosComponent implements OnInit {
     const payload = { descricao };
 
     if (this.assuntoEditando) {
-      this.api.put('assunto', this.assuntoEditando.codAs, {
+      this.api.put('assunto',  {
         codAs: this.assuntoEditando.codAs,
         descricao
-      }).subscribe({
+      },
+      this.assuntoEditando.codAs,).subscribe({
         next: () => {
           this.toast.showSuccess('Assunto atualizado com sucesso!');
           this.fecharModal();
