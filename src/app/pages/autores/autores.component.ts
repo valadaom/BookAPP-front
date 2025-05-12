@@ -71,8 +71,8 @@ export class AutoresComponent implements OnInit {
     }
   }
 
-  excluirAutor(id: number) {
-    this.api.delete('autor', id).subscribe({
+  excluirAutor(autor: Autor) {
+    this.api.delete('autor', autor.codAu).subscribe({
       next: () => {
         this.toast.showSuccess('Autor excluído!');  // Exibe sucesso
         this.carregarAutores();

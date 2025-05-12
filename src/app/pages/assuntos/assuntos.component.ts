@@ -74,8 +74,8 @@ export class AssuntosComponent implements OnInit {
     }
   }
 
-  excluirAssunto(id: number) {
-    this.api.delete('assunto', id).subscribe({
+  excluirAssunto(assunto: Assunto) {
+    this.api.delete('assunto', assunto.codAs).subscribe({
       next: () => {
         this.toast.showSuccess('Assunto excluído!');
         this.carregarAssuntos();
